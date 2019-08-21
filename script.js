@@ -1,9 +1,9 @@
- const celeste = document.getElementById('celeste')
+const celeste = document.getElementById('celeste')
 const violeta = document.getElementById('violeta')
 const naranja = document.getElementById('naranja')
 const verde = document.getElementById('verde')
 const btnEmpezar = document.getElementById('btnEmpezar')
-const ULTIMO_NIVEL = 20
+const ULTIMO_NIVEL = 10
 
 class Juego {
   constructor() {
@@ -13,17 +13,26 @@ class Juego {
   }
 
   inicializar() {
+    this.inicializar = this.inicializar.bind(this)  
     this.siguienteNivel = this.siguienteNivel.bind(this)
     this.elegirColor = this.elegirColor.bind(this)
-    btnEmpezar.classList.add('hide')
-    this.nivel = 5
+    this.toggleBtnEmpezar()
+    this.nivel = 1
     this.colores = {
     	celeste,
     	violeta,
     	naranja,
     	verde
-    }
+    };
   } 
+
+  toggleBtnEmpezar() {
+    if(btnEmpezar.classList.contains('hide')){
+      btnEmpezar.classList.remove('hide')
+    } else {
+      btnEmpezar.classList.add('hide')
+    }
+  }
 
   generarSecuencia(){
   	this.secuencia = new Array(ULTIMO_NIVEL).fill(0).map(n => Math.floor(Math.random()*4))//Importante lllamar a la funcion fill para que el array tenga algun valor, de esta forma despues le podemos aplicar .map()
@@ -99,17 +108,32 @@ class Juego {
       this.subnivel++
       if (this.subnivel === this.nivel){
         this.nivel++
-        this.elminarEventosClick()
+        this.eliminarEventosClick()
         if(this.nivel === (ULTIMO_NIVEL + 1)){
-          //Ganó
+          this.ganoElJuego()
         } else {
           setTimeout(this.siguienteNivel, 1500)
         }
       }
     } else{
-      //Perdió
+      this.perdioElJuego()
     }
   }
+
+  ganoElJuego(){
+    swal('Campeón','Has ganado, felicidades.','success')
+      .then(() => {
+        this.inicializar()
+      })
+  }
+
+  perdioElJuego(){
+    swal('Perdedor','Has perdido, sorry :(.','error')
+      .then(() => {
+        this.eliminarEventosClick()
+      })
+  }
+
 }
 
 function empezarJuego() {
