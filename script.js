@@ -4,6 +4,9 @@ const naranja = document.getElementById('naranja')
 const verde = document.getElementById('verde')
 const btnEmpezar = document.getElementById('btnEmpezar')
 const ULTIMO_NIVEL = 10
+const estrellas = document.querySelectorAll("i.far")
+
+
 
 class Juego {
   constructor() {
@@ -100,11 +103,16 @@ class Juego {
     this.colores.naranja.removeEventListener('click', this.elegirColor)
   } 
 
+  rellenarEstrella(){
+    estrellas[this.subnivel].classList.add('fas')
+  }
+
   elegirColor(ev){
   	const nombreColor = ev.target.dataset.color
     const numeroColor = this.transformarColorANumero(nombreColor)
     this.iluminarColor(nombreColor)
     if (numeroColor === this.secuencia[this.subnivel]){
+      this.rellenarEstrella()
       this.subnivel++
       if (this.subnivel === this.nivel){
         this.nivel++
@@ -134,7 +142,12 @@ class Juego {
       })
   }
 
+
 }
+
+console.log(estrellas)
+
+
 
 function empezarJuego() {
    window.juego = new Juego()
